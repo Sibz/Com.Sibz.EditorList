@@ -1,0 +1,8 @@
+{
+  "name": "com.sibz.editorlist",
+  "version": "1.0.0",
+  "displayName": "EditorList",
+  "description": "This packages enables List that can be nicely displayed in the editor. It's fully extensible.",
+  "unity": "2019.1",
+  "repository": { "type": "git", "url": ""}
+}
