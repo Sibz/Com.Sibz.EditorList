@@ -135,14 +135,14 @@ namespace Sibz.EditorList.Editor
         /// <param name="index"></param>
         protected virtual void ListItemAreaDrawer(SerializedProperty listProperty, SerializedProperty listItemProperty, int index)
         {
-            GUILayout.BeginHorizontal();
+            EditorGUILayout.BeginHorizontal();
             {
                 ListItemDrawer(listProperty, listItemProperty, index);
 
                 ListItemButtonsDrawer(listProperty, listItemProperty, index);
 
             }
-            GUILayout.EndHorizontal();
+            EditorGUILayout.EndHorizontal();
         }
 
         /// <summary>
@@ -191,10 +191,16 @@ namespace Sibz.EditorList.Editor
         /// <param name="listProperty">The list SerializedProperty that has the associated array attached.</param>
         protected virtual void Footer(SerializedProperty listProperty)
         {
-            if (DeleteAllButton)
+            EditorGUILayout.BeginHorizontal();
             {
-                ClearList(listProperty);
+                int indent = IndentLevelChange + (IndentContent ? 1 : 0);
+                GUILayout.Label("", GUILayout.MaxWidth(indent * 10));
+                if (DeleteAllButton)
+                {
+                    ClearList(listProperty);
+                }
             }
+            EditorGUILayout.EndHorizontal();
         }
 
         /// <summary>
