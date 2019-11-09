@@ -96,6 +96,18 @@ namespace Sibz.EditorList.Editor
         /// <param name="label">Label provided to the main PropertyField</param>
         protected virtual void Header(SerializedProperty property, SerializedProperty listProperty, GUIContent label) { }
 
+
+        protected virtual void ListItemAreaDrawer(SerializedProperty listProperty, SerializedProperty listItemProperty, int index)
+        {
+            GUILayout.BeginHorizontal();
+            {
+                ListItemDrawer(listProperty, listItemProperty, index);
+
+                ListItemButtonsDrawer(listProperty, listItemProperty, index);
+
+            }
+            GUILayout.EndHorizontal();
+        }
         /// <summary>
         /// Item section. Defaults to a Property Field. Override if required. Is drawn inside Horizontal Section with buttons.
         /// </summary>
@@ -245,14 +257,7 @@ namespace Sibz.EditorList.Editor
                     for (int i = 0; i < listProperty.arraySize; i++)
                     {
                         var listItemProperty = listProperty.GetArrayElementAtIndex(i);
-                        GUILayout.BeginHorizontal();
-                        {
-                            ListItemDrawer(listProperty, listItemProperty, i);
-
-                            ListItemButtonsDrawer(listProperty, listItemProperty, i);
-
-                        }
-                        GUILayout.EndHorizontal();
+                        ListItemAreaDrawer(listProperty, listItemProperty, i);
                     }
 
                     Footer(property, listProperty);
