@@ -15,6 +15,8 @@ namespace Sibz.EditorList.Editor
         /// </summary>
         public virtual bool IsFoldedOut { get; set; } = true;
 
+        protected SerializedProperty Property { get; private set; }
+
         /// <summary>
         /// Indicates if list is ordered
         /// If ordered full set of delete, moveup and movedown buttons
@@ -215,6 +217,7 @@ namespace Sibz.EditorList.Editor
         /// <param name="label"></param>
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
+            Property = property;
 
             EditorGUI.BeginProperty(position, label, property);
             if (AddColonToLabel)
