@@ -107,6 +107,10 @@ namespace Sibz.EditorList.Editor
             }
         }
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="listProperty"></param>
         protected virtual void ListAreaSection(SerializedProperty listProperty)
         {
             for (int i = 0; i < listProperty.arraySize; i++)
@@ -115,6 +119,7 @@ namespace Sibz.EditorList.Editor
                 ListItemAreaDrawer(listProperty, listItemProperty, i);
             }
         }
+
         /// <summary>
         /// Header section. Can be overriden to change what content appears above the list.
         /// </summary>
@@ -122,7 +127,12 @@ namespace Sibz.EditorList.Editor
         /// <param name="label">Label provided to the main PropertyField</param>
         protected virtual void Header(SerializedProperty listProperty, GUIContent label) { }
 
-
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="listProperty"></param>
+        /// <param name="listItemProperty"></param>
+        /// <param name="index"></param>
         protected virtual void ListItemAreaDrawer(SerializedProperty listProperty, SerializedProperty listItemProperty, int index)
         {
             GUILayout.BeginHorizontal();
@@ -134,6 +144,7 @@ namespace Sibz.EditorList.Editor
             }
             GUILayout.EndHorizontal();
         }
+
         /// <summary>
         /// Item section. Defaults to a Property Field. Override if required. Is drawn inside Horizontal Section with buttons.
         /// </summary>
