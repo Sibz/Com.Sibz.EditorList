@@ -49,3 +49,39 @@ using UnityEditor;
 [CustomPropertyDrawer(typeof(OrderedColliderList))]
 public class OrderedColliderListDrawer : ObjectListDrawer<Collider> { }
  ```
+
+### List of anything
+Anything can be listed, you either have to write a custom property drawer for the object you are listing, or override the default ListView.
+
+ 1. If you made your CustomPropertyDrawer for the property on the list:
+ ```csharp
+ [Serializable]
+public class OrderedCustomObjectList : EditorList<CustomObject>
+{
+    public string Name;
+}
+```
+
+ ```csharp
+[Serializable]
+public class OrderedCustomObjectList : EditorList<CustomObject> { }
+ ```
+ 
+*Note overriding ListDrawer here (not ObjectListDrawer):* 
+       
+ ```csharp
+[CustomPropertyDrawer(typeof(OrderedCustomObjectList))]
+public class CustomObjectListDrawer : ListDrawer<CustomObject> { }
+ ```
+  2. If you want to do your own thing for the item, then you have to override ListDrawer.ListItemDrawer:
+  
+  ```csharp
+  [CustomPropertyDrawer(typeof(OrderedCustomObjectList))]
+public class CustomObjectListDrawer : ListDrawer<CustomObject>
+{
+    protected override void ListItemDrawer(SerializedProperty listProperty, SerializedProperty listItemProperty, int index)
+    {
+        EditorGUILayout.LabelField(listItemProperty.FindPropertyRelative("Name").stringValue);
+    }
+}
+  ```
