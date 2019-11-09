@@ -91,10 +91,9 @@ namespace Sibz.EditorList.Editor
         /// <summary>
         /// Header section. Can be overriden to change what content appears above the list.
         /// </summary>
-        /// <param name="property">The main SerializedProperty the list belongs to</param>
         /// <param name="listProperty">The list SerializedProperty that has the associated array attached.</param>
         /// <param name="label">Label provided to the main PropertyField</param>
-        protected virtual void Header(SerializedProperty property, SerializedProperty listProperty, GUIContent label) { }
+        protected virtual void Header(SerializedProperty listProperty, GUIContent label) { }
 
 
         protected virtual void ListItemAreaDrawer(SerializedProperty listProperty, SerializedProperty listItemProperty, int index)
@@ -152,11 +151,11 @@ namespace Sibz.EditorList.Editor
         /// </summary>
         /// <param name="property">The main SerializedProperty the list belongs to</param>
         /// <param name="listProperty">The list SerializedProperty that has the associated array attached.</param>
-        protected virtual void Footer(SerializedProperty property, SerializedProperty listProperty)
+        protected virtual void Footer(SerializedProperty listProperty)
         {
             if (DeleteAllButton)
             {
-                ClearList(property, listProperty);
+                ClearList(listProperty);
             }
         }
 
@@ -166,7 +165,7 @@ namespace Sibz.EditorList.Editor
         /// </summary>
         /// <param name="property">The main SerializedProperty the list belongs to</param>
         /// <param name="listProperty">The list SerializedProperty that has the associated array attached.</param>
-        protected virtual void ClearList(SerializedProperty property, SerializedProperty listProperty) => listProperty.ClearArray();
+        protected virtual void ClearList(SerializedProperty listProperty) => listProperty.ClearArray();
 
         /// <summary>
         /// Deletes an item from the list property.
@@ -252,7 +251,7 @@ namespace Sibz.EditorList.Editor
                 var listProperty = property.FindPropertyRelative(nameof(EditorList<T>.List));
                 if (listProperty != null)
                 {
-                    Header(property, listProperty, label);
+                    Header(listProperty, label);
 
                     for (int i = 0; i < listProperty.arraySize; i++)
                     {
@@ -260,7 +259,7 @@ namespace Sibz.EditorList.Editor
                         ListItemAreaDrawer(listProperty, listItemProperty, i);
                     }
 
-                    Footer(property, listProperty);
+                    Footer(listProperty);
                 }
                 else
                 {
