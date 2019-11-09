@@ -7,7 +7,7 @@ namespace Sibz.EditorList
     /// Helper class to override for use with ListDrawers
     /// </summary>
     /// <typeparam name="T">Type of item in list</typeparam>
-    public class EditorList<T> : IList<T>
+    public class EditorList<T> : IList<T>, ICollection<T>
     {
         public List<T> List = new List<T>();
 
@@ -18,6 +18,8 @@ namespace Sibz.EditorList
         public bool IsReadOnly => false;
 
         public void Add(T item) => List.Add(item);
+
+        public void AddRange(IEnumerable<T> collection) => List.AddRange(collection);
 
         public void Clear() => List.Clear();
 
