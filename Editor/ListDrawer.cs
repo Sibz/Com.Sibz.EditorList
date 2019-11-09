@@ -97,11 +97,7 @@ namespace Sibz.EditorList.Editor
             {
                 Header(listProperty, label);
 
-                for (int i = 0; i < listProperty.arraySize; i++)
-                {
-                    var listItemProperty = listProperty.GetArrayElementAtIndex(i);
-                    ListItemAreaDrawer(listProperty, listItemProperty, i);
-                }
+                ListAreaSection(listProperty);
 
                 Footer(listProperty);
             }
@@ -111,6 +107,14 @@ namespace Sibz.EditorList.Editor
             }
         }
 
+        protected virtual void ListAreaSection(SerializedProperty listProperty)
+        {
+            for (int i = 0; i < listProperty.arraySize; i++)
+            {
+                var listItemProperty = listProperty.GetArrayElementAtIndex(i);
+                ListItemAreaDrawer(listProperty, listItemProperty, i);
+            }
+        }
         /// <summary>
         /// Header section. Can be overriden to change what content appears above the list.
         /// </summary>
