@@ -56,10 +56,9 @@ Anything can be listed, you either have to write a custom property drawer for th
  1. If you made your CustomPropertyDrawer for the property on the list:
  ```csharp
  [Serializable]
-public class OrderedCustomObjectList : EditorList<CustomObject>
-{
+public class CustomObject {
     public string Name;
-}
+};
 ```
 
  ```csharp
