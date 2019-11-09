@@ -1,8 +1,8 @@
 {
   "name": "com.sibz.editorlist",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "displayName": "Sibz: Editor Friendly Lists",
   "description": "This packages enables Lists that can be nicely displayed in the editor and is fully extensible.",
   "unity": "2019.1",
-  "repository": { "type": "git", "url": ""}
+  "repository": { "type": "git", "url": "https://github.com/Sibz/Com.Sibz.EditorList.git"}
 }
