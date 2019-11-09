@@ -68,7 +68,7 @@ namespace Sibz.EditorList.Editor
         /// Default foldout function
         /// If overridden, function must display a foldout (or similar control) and return true to show content
         /// </summary>
-        protected virtual bool Foldout(Rect position, bool foldedOut, GUIContent label) => EditorGUI.Foldout(position, foldedOut, label);
+        protected virtual bool Foldout(bool foldedOut, GUIContent label) => EditorGUILayout.Foldout(foldedOut, label);
 
         /// <summary>
         /// Style of the header label when fold out is not selected
@@ -210,18 +210,20 @@ namespace Sibz.EditorList.Editor
         /// <param name="label"></param>
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
+
+            EditorGUI.BeginProperty(position, label, property);
             if (AddColonToLabel)
             {
                 label.text = label.text + ":";
             }
 
-            if (UseFoldout && (IsFoldedOut = Foldout(position, IsFoldedOut, label)) || !UseFoldout)
+            if (UseFoldout && (IsFoldedOut = Foldout(IsFoldedOut, label)) || !UseFoldout)
             {
                 if (!UseFoldout)
                 {
-                    GUI.Label(position, label, NonFoldedHeadingLabelStyle);
-
+                    GUILayout.Label(label, NonFoldedHeadingLabelStyle);
                 }
+                EditorGUI.indentLevel++;
                 if (IndentContent)
                 {
                     EditorGUI.indentLevel++;
@@ -246,11 +248,13 @@ namespace Sibz.EditorList.Editor
 
                 Footer(property, listProperty);
 
-                if (!IndentContent)
+                if (IndentContent)
                 {
                     EditorGUI.indentLevel--;
                 }
+                EditorGUI.indentLevel--;
             }
+            EditorGUI.EndProperty();
         }
 
         // Gets rid of space atop the list.
