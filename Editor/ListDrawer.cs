@@ -237,25 +237,30 @@ namespace Sibz.EditorList.Editor
                     EditorGUI.indentLevel++;
                 }
 
-                var listProperty = property.FindPropertyRelative("List");
-
-                Header(property, listProperty, label);
-
-                for (int i = 0; i < listProperty.arraySize; i++)
+                var listProperty = property.FindPropertyRelative(nameof(EditorList<T>.List));
+                if (listProperty != null)
                 {
-                    var listItemProperty = listProperty.GetArrayElementAtIndex(i);
-                    GUILayout.BeginHorizontal();
+                    Header(property, listProperty, label);
+
+                    for (int i = 0; i < listProperty.arraySize; i++)
                     {
-                        ListItemDrawer(listProperty, listItemProperty, i);
+                        var listItemProperty = listProperty.GetArrayElementAtIndex(i);
+                        GUILayout.BeginHorizontal();
+                        {
+                            ListItemDrawer(listProperty, listItemProperty, i);
 
-                        ListItemButtonsDrawer(listProperty, listItemProperty, i);
+                            ListItemButtonsDrawer(listProperty, listItemProperty, i);
 
+                        }
+                        GUILayout.EndHorizontal();
                     }
-                    GUILayout.EndHorizontal();
+
+                    Footer(property, listProperty);
                 }
-
-                Footer(property, listProperty);
-
+                else
+                {
+                    Debug.LogWarning($"{nameof(ListDrawer<T>)}: Unable to get list property. Be sure your property extends EditorList<T>.");
+                }
                 if (IndentContent)
                 {
                     EditorGUI.indentLevel--;
