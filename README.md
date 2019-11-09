@@ -84,3 +84,6 @@ public class CustomObjectListDrawer : ListDrawer<CustomObject>
     }
 }
   ```
+  Custom List Result:
+  
+  <a href="https://imgbb.com/"><img src="https://i.ibb.co/sqSVStw/sample2.png" alt="sample2" border="0"></a>
