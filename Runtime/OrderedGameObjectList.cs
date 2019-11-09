@@ -1,7 +1,6 @@
 ﻿using System;
-using UnityEditor;
 using UnityEngine;
+using Sibz.EditorList;
 
-
-    [Serializable]
-    public class OrderedGameObjectList : Sibz.EditorList.EditorList<GameObject> { }
+[Serializable]
+public class OrderedGameObjectList : EditorList<GameObject> { }
