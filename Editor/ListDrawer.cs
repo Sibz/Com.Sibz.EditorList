@@ -35,10 +35,15 @@ namespace Sibz.EditorList.Editor
         protected virtual bool AddColonToLabel => !UseFoldout;
 
         /// <summary>
-        /// Used to indent content under heading
-        /// Defaults to true if not a folder, otherwise false
+        /// Used to indent content under heading / foldout
+        /// Defaults to true
         /// </summary>
-        protected virtual bool IndentContent => !UseFoldout;
+        protected virtual bool IndentContent => true;
+
+        /// <summary>
+        /// Level of indent change the drawer to apply
+        /// </summary>
+        protected virtual int IndentLevelChange => 0;
 
         /// <summary>
         /// Default button to use for delete all.
@@ -223,7 +228,7 @@ namespace Sibz.EditorList.Editor
                 {
                     GUILayout.Label(label, NonFoldedHeadingLabelStyle);
                 }
-                EditorGUI.indentLevel++;
+                EditorGUI.indentLevel += IndentLevelChange;
                 if (IndentContent)
                 {
                     EditorGUI.indentLevel++;
@@ -252,7 +257,7 @@ namespace Sibz.EditorList.Editor
                 {
                     EditorGUI.indentLevel--;
                 }
-                EditorGUI.indentLevel--;
+                EditorGUI.indentLevel -= IndentLevelChange;
             }
             EditorGUI.EndProperty();
         }
