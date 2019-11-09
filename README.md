@@ -10,6 +10,9 @@ Contains two implementations
  ### Usage 
  
  ```csharp
+using UnityEditor;
+using UnityEngine;
+
 public class MyTestMono : MonoBehaviour
 {
     public UnorderedGameObjectList GameObjectsList1;
@@ -18,7 +21,10 @@ public class MyTestMono : MonoBehaviour
 
 // This is required to enable the use of GUILayout. Can also be put in own file.
 #if UNITY_EDITOR
-[CustomEditor(typeof(MyTestMono))]
+[CustomEditor(typeof(MyTestMono)), CanEditMultipleObjects]
 public class MyTestMonoCI : Editor{}
 #endif
  ```
+This should give you something similar to:
+
+<a href="https://imgbb.com/"><img src="https://i.ibb.co/Cbn9DSj/sample.png" alt="sample" border="0"></a>
