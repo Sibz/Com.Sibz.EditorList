@@ -28,3 +28,24 @@ public class MyTestMonoCI : Editor{}
 This should give you something similar to:
 
 <a href="https://imgbb.com/"><img src="https://i.ibb.co/Cbn9DSj/sample.png" alt="sample" border="0"></a>
+
+### List of Custom (Unity)Objects
+
+Implement as above but define your own  EditList<T> and ObjectListDrawer<T>. T Must derive from UnityEngine.Object.
+ #### OrderedColliderList.cs
+ ```csharp
+ using System;
+using UnityEngine;
+using Sibz.EditorList;
+
+[Serializable]
+public class OrderedColliderList : EditorList<Collider> { }
+ ```
+ #### OrderedColliderListDrawer.cs
+ ```csharp
+ using Sibz.EditorList.Editor;
+using UnityEditor;
+
+[CustomPropertyDrawer(typeof(OrderedColliderList))]
+public class OrderedColliderListDrawer : ObjectListDrawer<Collider> { }
+ ```
