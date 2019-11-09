@@ -1,7 +1,7 @@
 ## Com.Sibz.EditorList
 This packages enables lists that can be nicely displayed in the editor. It's fully extensible.
 
-Contains two implementations
+Contains two implementations:
  - UnorderedGameObjectList
  - OrderedGameObjectList
  
