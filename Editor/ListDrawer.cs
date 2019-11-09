@@ -15,6 +15,8 @@ namespace Sibz.EditorList.Editor
         /// </summary>
         public virtual bool IsFoldedOut { get; set; } = true;
 
+        protected SerializedProperty Property { get; private set; }
+
         /// <summary>
         /// Indicates if list is ordered
         /// If ordered full set of delete, moveup and movedown buttons
@@ -86,14 +88,52 @@ namespace Sibz.EditorList.Editor
         /// </summary>
         protected virtual GUILayoutOption[] ItemButtonsOptions => Ordered ? new GUILayoutOption[] { GUILayout.MaxWidth(20) } : new GUILayoutOption[0];
 
+
+        protected virtual void ContentSection(GUIContent label)
+        {
+
+            var listProperty = Property.FindPropertyRelative(nameof(EditorList<T>.List));
+            if (listProperty != null)
+            {
+                Header(listProperty, label);
+
+                ListAreaSection(listProperty);
+
+                Footer(listProperty);
+            }
+            else
+            {
+                Debug.LogWarning($"{nameof(ListDrawer<T>)}: Unable to get list property. Be sure your property extends EditorList<T>.");
+            }
+        }
+
+        protected virtual void ListAreaSection(SerializedProperty listProperty)
+        {
+            for (int i = 0; i < listProperty.arraySize; i++)
+            {
+                var listItemProperty = listProperty.GetArrayElementAtIndex(i);
+                ListItemAreaDrawer(listProperty, listItemProperty, i);
+            }
+        }
         /// <summary>
         /// Header section. Can be overriden to change what content appears above the list.
         /// </summary>
-        /// <param name="property">The main SerializedProperty the list belongs to</param>
         /// <param name="listProperty">The list SerializedProperty that has the associated array attached.</param>
         /// <param name="label">Label provided to the main PropertyField</param>
-        protected virtual void Header(SerializedProperty property, SerializedProperty listProperty, GUIContent label) { }
+        protected virtual void Header(SerializedProperty listProperty, GUIContent label) { }
 
+
+        protected virtual void ListItemAreaDrawer(SerializedProperty listProperty, SerializedProperty listItemProperty, int index)
+        {
+            GUILayout.BeginHorizontal();
+            {
+                ListItemDrawer(listProperty, listItemProperty, index);
+
+                ListItemButtonsDrawer(listProperty, listItemProperty, index);
+
+            }
+            GUILayout.EndHorizontal();
+        }
         /// <summary>
         /// Item section. Defaults to a Property Field. Override if required. Is drawn inside Horizontal Section with buttons.
         /// </summary>
@@ -138,11 +178,11 @@ namespace Sibz.EditorList.Editor
         /// </summary>
         /// <param name="property">The main SerializedProperty the list belongs to</param>
         /// <param name="listProperty">The list SerializedProperty that has the associated array attached.</param>
-        protected virtual void Footer(SerializedProperty property, SerializedProperty listProperty)
+        protected virtual void Footer(SerializedProperty listProperty)
         {
             if (DeleteAllButton)
             {
-                ClearList(property, listProperty);
+                ClearList(listProperty);
             }
         }
 
@@ -152,7 +192,7 @@ namespace Sibz.EditorList.Editor
         /// </summary>
         /// <param name="property">The main SerializedProperty the list belongs to</param>
         /// <param name="listProperty">The list SerializedProperty that has the associated array attached.</param>
-        protected virtual void ClearList(SerializedProperty property, SerializedProperty listProperty) => listProperty.ClearArray();
+        protected virtual void ClearList(SerializedProperty listProperty) => listProperty.ClearArray();
 
         /// <summary>
         /// Deletes an item from the list property.
@@ -215,6 +255,7 @@ namespace Sibz.EditorList.Editor
         /// <param name="label"></param>
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
+            Property = property;
 
             EditorGUI.BeginProperty(position, label, property);
             if (AddColonToLabel)
@@ -228,34 +269,20 @@ namespace Sibz.EditorList.Editor
                 {
                     GUILayout.Label(label, NonFoldedHeadingLabelStyle);
                 }
+
                 EditorGUI.indentLevel += IndentLevelChange;
-                if (IndentContent)
                 {
-                    EditorGUI.indentLevel++;
-                }
-
-                var listProperty = property.FindPropertyRelative("List");
-
-                Header(property, listProperty, label);
-
-                for (int i = 0; i < listProperty.arraySize; i++)
-                {
-                    var listItemProperty = listProperty.GetArrayElementAtIndex(i);
-                    GUILayout.BeginHorizontal();
+                    if (IndentContent)
                     {
-                        ListItemDrawer(listProperty, listItemProperty, i);
-
-                        ListItemButtonsDrawer(listProperty, listItemProperty, i);
-
+                        EditorGUI.indentLevel++;
                     }
-                    GUILayout.EndHorizontal();
-                }
 
-                Footer(property, listProperty);
+                    ContentSection(label);
 
-                if (IndentContent)
-                {
-                    EditorGUI.indentLevel--;
+                    if (IndentContent)
+                    {
+                        EditorGUI.indentLevel--;
+                    }
                 }
                 EditorGUI.indentLevel -= IndentLevelChange;
             }

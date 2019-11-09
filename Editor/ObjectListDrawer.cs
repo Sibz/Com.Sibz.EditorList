@@ -69,7 +69,7 @@ namespace Sibz.EditorList.Editor
         /// <param name="property">The main SerializedProperty the list belongs to</param>
         /// <param name="listProperty">The list SerializedProperty that has the associated array attached.</param>
         /// <param name="label">Label provided to the main PropertyField</param>
-        protected override void Header(SerializedProperty property, SerializedProperty listProperty, GUIContent label)
+        protected override void Header(SerializedProperty listProperty, GUIContent label)
         {
             T go = null;
             if ((go = AddObjectField(go)) != null)
