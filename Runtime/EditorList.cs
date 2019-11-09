@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Sibz.EditorList
 {
@@ -9,6 +10,7 @@ namespace Sibz.EditorList
     /// <typeparam name="T">Type of item in list</typeparam>
     public class EditorList<T> : IList<T>, ICollection<T>
     {
+        [SerializeField]
         public List<T> List = new List<T>();
 
         public T this[int index] { get => List[index]; set => List[index] = value; }
