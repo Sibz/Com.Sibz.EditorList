@@ -252,5 +252,8 @@ namespace Sibz.EditorList.Editor
                 }
             }
         }
+
+        // Gets rid of space atop the list.
+        public override float GetPropertyHeight(SerializedProperty property, GUIContent label) { return 0f; }
     }
 }
