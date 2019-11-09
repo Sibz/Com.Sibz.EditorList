@@ -88,6 +88,29 @@ namespace Sibz.EditorList.Editor
         /// </summary>
         protected virtual GUILayoutOption[] ItemButtonsOptions => Ordered ? new GUILayoutOption[] { GUILayout.MaxWidth(20) } : new GUILayoutOption[0];
 
+
+        protected virtual void ContentSection(GUIContent label)
+        {
+
+            var listProperty = Property.FindPropertyRelative(nameof(EditorList<T>.List));
+            if (listProperty != null)
+            {
+                Header(listProperty, label);
+
+                for (int i = 0; i < listProperty.arraySize; i++)
+                {
+                    var listItemProperty = listProperty.GetArrayElementAtIndex(i);
+                    ListItemAreaDrawer(listProperty, listItemProperty, i);
+                }
+
+                Footer(listProperty);
+            }
+            else
+            {
+                Debug.LogWarning($"{nameof(ListDrawer<T>)}: Unable to get list property. Be sure your property extends EditorList<T>.");
+            }
+        }
+
         /// <summary>
         /// Header section. Can be overriden to change what content appears above the list.
         /// </summary>
@@ -242,32 +265,20 @@ namespace Sibz.EditorList.Editor
                 {
                     GUILayout.Label(label, NonFoldedHeadingLabelStyle);
                 }
+
                 EditorGUI.indentLevel += IndentLevelChange;
-                if (IndentContent)
                 {
-                    EditorGUI.indentLevel++;
-                }
-
-                var listProperty = property.FindPropertyRelative(nameof(EditorList<T>.List));
-                if (listProperty != null)
-                {
-                    Header(listProperty, label);
-
-                    for (int i = 0; i < listProperty.arraySize; i++)
+                    if (IndentContent)
                     {
-                        var listItemProperty = listProperty.GetArrayElementAtIndex(i);
-                        ListItemAreaDrawer(listProperty, listItemProperty, i);
+                        EditorGUI.indentLevel++;
                     }
 
-                    Footer(listProperty);
-                }
-                else
-                {
-                    Debug.LogWarning($"{nameof(ListDrawer<T>)}: Unable to get list property. Be sure your property extends EditorList<T>.");
-                }
-                if (IndentContent)
-                {
-                    EditorGUI.indentLevel--;
+                    ContentSection(label);
+
+                    if (IndentContent)
+                    {
+                        EditorGUI.indentLevel--;
+                    }
                 }
                 EditorGUI.indentLevel -= IndentLevelChange;
             }
