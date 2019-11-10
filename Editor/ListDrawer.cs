@@ -9,15 +9,6 @@ namespace Sibz.EditorList.Editor
     /// <typeparam name="T">Type of item in the list</typeparam>
     public abstract partial class ListDrawer<T> : PropertyDrawer
     {
-
-
-
-
-
-
-
-
-
         /// <summary>
         /// Main function responsible for structuring the property.
         /// </summary>
