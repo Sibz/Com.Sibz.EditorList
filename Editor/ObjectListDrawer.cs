@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-namespace Sibz.EditorList.Editor
+namespace Sibz.EditorList
 {
     /// <summary>
     /// Base class for nicer UnityEngine.Object lists in the editor
