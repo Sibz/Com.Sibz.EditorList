@@ -23,7 +23,7 @@ namespace Sibz.EditorList
             }
             else
             {
-                Debug.LogWarning($"{nameof(ListDrawer<T>)}: Unable to get list property. Be sure your property extends EditorList<T>.");
+                Debug.LogWarning($"{nameof(ListDrawer<T>)}: Unable to get list property. Be sure your property extends EditorList<T> and that the property class & T are Serializable");
             }
         }
 
