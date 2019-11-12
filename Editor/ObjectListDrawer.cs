@@ -69,7 +69,7 @@ namespace Sibz.EditorList
         /// <param name="property">The main SerializedProperty the list belongs to</param>
         /// <param name="listProperty">The list SerializedProperty that has the associated array attached.</param>
         /// <param name="label">Label provided to the main PropertyField</param>
-        protected override void Header(SerializedProperty listProperty, GUIContent label)
+        protected override void HeaderSection(SerializedProperty listProperty, GUIContent label)
         {
             T go = null;
             if ((go = AddObjectField(go)) != null)
@@ -86,7 +86,7 @@ namespace Sibz.EditorList
         /// <param name="listProperty">The list SerializedProperty that has the associated array attached.</param>
         /// <param name="listItemProperty">The listItem SerializedProperty</param>
         /// <param name="index">Index of item</param>
-        protected override void ListItemButtonsDrawer(SerializedProperty listProperty, SerializedProperty listItemProperty, int index)
+        protected override void ListItemButtonsSection(SerializedProperty listProperty, SerializedProperty listItemProperty, int index)
         {
             if (AllowNullObjects)
             {
@@ -95,7 +95,7 @@ namespace Sibz.EditorList
                     ClearItem(listProperty, listItemProperty, index);
                 }
             }
-            base.ListItemButtonsDrawer(listProperty, listItemProperty, index);
+            base.ListItemButtonsSection(listProperty, listItemProperty, index);
         }
 
         /// <summary>
@@ -104,7 +104,7 @@ namespace Sibz.EditorList
         /// <param name="listProperty">The list SerializedProperty that has the associated array attached.</param>
         /// <param name="listItemProperty">The listItem SerializedProperty</param>
         /// <param name="index">Index of item</param>
-        protected override void ListItemDrawer(SerializedProperty listProperty, SerializedProperty listItemProperty, int index)
+        protected override void ListItemSection(SerializedProperty listProperty, SerializedProperty listItemProperty, int index)
         {
             if (!AllowNullObjects && listItemProperty.objectReferenceValue == null)
             {
@@ -112,7 +112,7 @@ namespace Sibz.EditorList
             }
             else
             {
-                base.ListItemDrawer(listProperty, listItemProperty, index);
+                base.ListItemSection(listProperty, listItemProperty, index);
             }
         }
     }

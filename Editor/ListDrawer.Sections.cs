@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using System;
+using UnityEditor;
 using UnityEngine;
 
 namespace Sibz.EditorList
@@ -15,11 +16,11 @@ namespace Sibz.EditorList
             var listProperty = Property.FindPropertyRelative(nameof(EditorList<T>.List));
             if (listProperty != null)
             {
-                Header(listProperty, label);
+                HeaderSection(listProperty, label);
 
                 ListAreaSection(listProperty);
 
-                Footer(listProperty);
+                FooterSection(listProperty);
             }
             else
             {
@@ -36,16 +37,20 @@ namespace Sibz.EditorList
             for (int i = 0; i < listProperty.arraySize; i++)
             {
                 var listItemProperty = listProperty.GetArrayElementAtIndex(i);
-                ListItemAreaDrawer(listProperty, listItemProperty, i);
+                ListItemAreaSection(listProperty, listItemProperty, i);
             }
         }
+        [Obsolete("Use ListAreaSection instead")]
+        protected virtual void ListAreaDrawer(SerializedProperty listProperty) => ListAreaSection(listProperty);
 
         /// <summary>
         /// Header section. Can be overriden to change what content appears above the list.
         /// </summary>
         /// <param name="listProperty">The list SerializedProperty that has the associated array attached.</param>
         /// <param name="label">Label provided to the main PropertyField</param>
-        protected virtual void Header(SerializedProperty listProperty, GUIContent label) { }
+        protected virtual void HeaderSection(SerializedProperty listProperty, GUIContent label) { }
+        [Obsolete("Use HeaderSection instead")]
+        protected virtual void Header(SerializedProperty listProperty, GUIContent label) => HeaderSection(listProperty, label);
 
         /// <summary>
         ///
@@ -53,17 +58,19 @@ namespace Sibz.EditorList
         /// <param name="listProperty"></param>
         /// <param name="listItemProperty"></param>
         /// <param name="index"></param>
-        protected virtual void ListItemAreaDrawer(SerializedProperty listProperty, SerializedProperty listItemProperty, int index)
+        protected virtual void ListItemAreaSection(SerializedProperty listProperty, SerializedProperty listItemProperty, int index)
         {
             EditorGUILayout.BeginHorizontal();
             {
-                ListItemDrawer(listProperty, listItemProperty, index);
+                ListItemSection(listProperty, listItemProperty, index);
 
-                ListItemButtonsDrawer(listProperty, listItemProperty, index);
+                ListItemButtonsSection(listProperty, listItemProperty, index);
 
             }
             EditorGUILayout.EndHorizontal();
         }
+        [Obsolete("Use ListItemAreaSection instead")]
+        protected virtual void ListItemAreaDrawer(SerializedProperty listProperty, SerializedProperty listItemProperty, int index) => ListItemAreaSection(listProperty, listItemProperty, index);
 
         /// <summary>
         /// Item section. Defaults to a Property Field. Override if required. Is drawn inside Horizontal Section with buttons.
@@ -71,11 +78,13 @@ namespace Sibz.EditorList
         /// <param name="listProperty">The list SerializedProperty that has the associated array attached.</param>
         /// <param name="listItemProperty">The listItem SerializedProperty</param>
         /// <param name="index">Index of item</param>
-        protected virtual void ListItemDrawer(SerializedProperty listProperty, SerializedProperty listItemProperty, int index)
+        protected virtual void ListItemSection(SerializedProperty listProperty, SerializedProperty listItemProperty, int index)
         {
             EditorGUILayout.PropertyField(listItemProperty, GUIContent.none);
         }
 
+        [Obsolete("Use ListItemSection instead")]
+        protected virtual void ListItemDrawer(SerializedProperty listProperty, SerializedProperty listItemProperty, int index) => ListItemSection(listProperty, listItemProperty, index);
         /// <summary>
         /// Item Buttons Section. Defaults to Delete button and if Ordered=true, MoveUp and MoveDown  buttons.
         /// Is drawn inside Horizontal Section with list item.
@@ -83,7 +92,7 @@ namespace Sibz.EditorList
         /// <param name="listProperty">The list SerializedProperty that has the associated array attached.</param>
         /// <param name="listItemProperty">The listItem SerializedProperty</param>
         /// <param name="index">Index of item</param>
-        protected virtual void ListItemButtonsDrawer(SerializedProperty listProperty, SerializedProperty listItemProperty, int index)
+        protected virtual void ListItemButtonsSection(SerializedProperty listProperty, SerializedProperty listItemProperty, int index)
         {
             if (DeleteButton)
             {
@@ -102,6 +111,8 @@ namespace Sibz.EditorList
                 }
             }
         }
+        [Obsolete("Use ListItemButtonsSection instead")]
+        protected virtual void ListItemButtonsDrawer(SerializedProperty listProperty, SerializedProperty listItemProperty, int index) => ListItemButtonsSection(listProperty, listItemProperty, index);
 
         /// <summary>
         /// Footer section. Defaults to a Delete All Button.
@@ -109,7 +120,7 @@ namespace Sibz.EditorList
         /// </summary>
         /// <param name="property">The main SerializedProperty the list belongs to</param>
         /// <param name="listProperty">The list SerializedProperty that has the associated array attached.</param>
-        protected virtual void Footer(SerializedProperty listProperty)
+        protected virtual void FooterSection(SerializedProperty listProperty)
         {
             EditorGUILayout.BeginHorizontal();
             {
@@ -122,5 +133,7 @@ namespace Sibz.EditorList
             }
             EditorGUILayout.EndHorizontal();
         }
+        [Obsolete("Use FooterSection instead")]
+        protected virtual void Footer(SerializedProperty listProperty) => FooterSection(listProperty);
     }
 }
