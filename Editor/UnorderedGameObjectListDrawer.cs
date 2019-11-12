@@ -3,7 +3,7 @@ using UnityEngine;
 
 
 [CustomPropertyDrawer(typeof(UnorderedGameObjectList))]
-public class UnorderedGameObjectListDrawer : Sibz.EditorList.Editor.ObjectListDrawer<GameObject>
+public class UnorderedGameObjectListDrawer : Sibz.EditorList.ObjectListDrawer<GameObject>
 {
     protected override bool Ordered => false;
 }
