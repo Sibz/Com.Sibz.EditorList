@@ -10,6 +10,10 @@ namespace Sibz.EditorList
     /// <typeparam name="T">Type of item in the list</typeparam>
     public abstract partial class ListDrawer<T> : PropertyDrawer
     {
+
+        protected virtual void PreGUI() { }
+        protected virtual void PostGUI() { }
+
         protected virtual void ContentSection(GUIContent label)
         {
 

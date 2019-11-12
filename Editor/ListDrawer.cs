@@ -32,6 +32,10 @@ namespace Sibz.EditorList
                 label.text = label.text + ":";
             }
 
+            EditorGUI.BeginProperty(position, label, property);
+
+            PreGUI();
+
             if (UseFoldout && (IsFoldedOut = Foldout(IsFoldedOut, label)) || !UseFoldout)
             {
                 if (!UseFoldout)
@@ -55,6 +59,9 @@ namespace Sibz.EditorList
                 }
                 EditorGUI.indentLevel -= IndentLevelChange;
             }
+
+            PostGUI();
+
             EditorGUI.EndProperty();
         }
 
