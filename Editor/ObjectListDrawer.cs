@@ -34,12 +34,12 @@ namespace Sibz.EditorList
         /// <param name="listProperty">The list SerializedProperty that has the associated array attached.</param>
         /// <param name="listItemProperty">The listItem SerializedProperty</param>
         /// <param name="index">Index of item</param>
-        protected virtual void ClearItem(SerializedProperty listProperty, SerializedProperty listItemProperty, int index)
+        protected virtual void ClearItem(SerializedProperty listItemProperty, int index)
         {
             // Check value is not null, otherwise we will unset it
             if (listItemProperty.objectReferenceValue != null)
             {
-                listProperty.DeleteArrayElementAtIndex(index);
+                ListProperty.DeleteArrayElementAtIndex(index);
             }
         }
 
@@ -49,17 +49,17 @@ namespace Sibz.EditorList
         /// <param name="listProperty">The list SerializedProperty that has the associated array attached.</param>
         /// <param name="listItemProperty">The listItem SerializedProperty</param>
         /// <param name="index">Index of item</param>
-        protected override void DeleteItem(SerializedProperty listProperty, SerializedProperty listItemProperty, int index)
+        protected override void DeleteItem(SerializedProperty listItemProperty, int index)
         {
-            int count = listProperty.arraySize;
+            int count = ListProperty.arraySize;
 
-            base.DeleteItem(listProperty, listItemProperty, index);
+            base.DeleteItem(listItemProperty, index);
 
             // If deleting a object field, the first time will only clear the GO
             // We need a second attempt to delete it
-            if (listProperty.arraySize == count)
+            if (ListProperty.arraySize == count)
             {
-                base.DeleteItem(listProperty, listItemProperty, index);
+                base.DeleteItem(listItemProperty, index);
             }
         }
 
@@ -69,14 +69,14 @@ namespace Sibz.EditorList
         /// <param name="property">The main SerializedProperty the list belongs to</param>
         /// <param name="listProperty">The list SerializedProperty that has the associated array attached.</param>
         /// <param name="label">Label provided to the main PropertyField</param>
-        protected override void HeaderSection(SerializedProperty listProperty, GUIContent label)
+        protected override void HeaderSection(GUIContent label)
         {
             T go = null;
             if ((go = AddObjectField(go)) != null)
             {
-                int newItemIndex = listProperty.arraySize;
-                listProperty.InsertArrayElementAtIndex(newItemIndex);
-                listProperty.GetArrayElementAtIndex(newItemIndex).objectReferenceValue = go;
+                int newItemIndex = ListProperty.arraySize;
+                ListProperty.InsertArrayElementAtIndex(newItemIndex);
+                ListProperty.GetArrayElementAtIndex(newItemIndex).objectReferenceValue = go;
             }
         }
 
@@ -86,16 +86,16 @@ namespace Sibz.EditorList
         /// <param name="listProperty">The list SerializedProperty that has the associated array attached.</param>
         /// <param name="listItemProperty">The listItem SerializedProperty</param>
         /// <param name="index">Index of item</param>
-        protected override void ListItemButtonsSection(SerializedProperty listProperty, SerializedProperty listItemProperty, int index)
+        protected override void ListItemButtonsSection(SerializedProperty listItemProperty, int index)
         {
             if (AllowNullObjects)
             {
                 if (ClearButton)
                 {
-                    ClearItem(listProperty, listItemProperty, index);
+                    ClearItem(listItemProperty, index);
                 }
             }
-            base.ListItemButtonsSection(listProperty, listItemProperty, index);
+            base.ListItemButtonsSection(listItemProperty, index);
         }
 
         /// <summary>
@@ -104,15 +104,15 @@ namespace Sibz.EditorList
         /// <param name="listProperty">The list SerializedProperty that has the associated array attached.</param>
         /// <param name="listItemProperty">The listItem SerializedProperty</param>
         /// <param name="index">Index of item</param>
-        protected override void ListItemSection(SerializedProperty listProperty, SerializedProperty listItemProperty, int index)
+        protected override void ListItemSection(SerializedProperty listItemProperty, int index)
         {
             if (!AllowNullObjects && listItemProperty.objectReferenceValue == null)
             {
-                DeleteItem(listProperty, listItemProperty, index);
+                DeleteItem(listItemProperty, index);
             }
             else
             {
-                base.ListItemSection(listProperty, listItemProperty, index);
+                base.ListItemSection(listItemProperty, index);
             }
         }
     }
