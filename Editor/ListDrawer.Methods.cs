@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using System;
+using UnityEditor;
 using UnityEngine;
 
 namespace Sibz.EditorList
@@ -15,6 +16,8 @@ namespace Sibz.EditorList
         /// </summary>
         /// <param name="property">The main SerializedProperty the list belongs to</param>
         /// <param name="listProperty">The list SerializedProperty that has the associated array attached.</param>
+        protected virtual void ClearList() => ListProperty.ClearArray();
+        [Obsolete("Use ClearList() instead")]
         protected virtual void ClearList(SerializedProperty listProperty) => listProperty.ClearArray();
 
         /// <summary>
@@ -24,11 +27,12 @@ namespace Sibz.EditorList
         /// <param name="listProperty"></param>
         /// <param name="listItemProperty"></param>
         /// <param name="index"></param>
-        protected virtual void DeleteItem(SerializedProperty listProperty, SerializedProperty listItemProperty, int index)
+        protected virtual void DeleteItem(SerializedProperty listItemProperty, int index)
         {
-            listProperty.DeleteArrayElementAtIndex(index);
+            ListProperty.DeleteArrayElementAtIndex(index);
         }
-
+        [Obsolete("Use DeleteItem(SerializedProperty listItemProperty, int index) instead")]
+        protected virtual void DeleteItem(SerializedProperty listProperty, SerializedProperty listItemProperty, int index) => DeleteItem(listItemProperty, index);
         /// <summary>
         /// Moves an item within the list property. Is only called if toIndex is valid (I.e. not outside the list).
         /// <para>Can be overridden if not altering property directly or other logic is required.</para>
@@ -37,10 +41,12 @@ namespace Sibz.EditorList
         /// <param name="listItemProperty"></param>
         /// <param name="fromIndex"></param>
         /// <param name="toIndex"></param>
-        protected virtual void MoveTo(SerializedProperty listProperty, SerializedProperty listItemProperty, int fromIndex, int toIndex)
+        protected virtual void MoveTo(SerializedProperty listItemProperty, int fromIndex, int toIndex)
         {
-            listProperty.MoveArrayElement(fromIndex, toIndex);
+            ListProperty.MoveArrayElement(fromIndex, toIndex);
         }
+        [Obsolete("Use MoveTo(SerializedProperty listItemProperty, int index) instead")]
+        protected virtual void MoveTo(SerializedProperty listProperty, SerializedProperty listItemProperty, int fromIndex, int toIndex) => MoveTo(listItemProperty, fromIndex, toIndex);
 
         /// <summary>
         /// Checks item index and calls MoveTo
@@ -48,11 +54,11 @@ namespace Sibz.EditorList
         /// <param name="listProperty"></param>
         /// <param name="listItemProperty"></param>
         /// <param name="fromIndex"></param>
-        private void MoveUp(SerializedProperty listProperty, SerializedProperty listItemProperty, int fromIndex)
+        protected void MoveUp(SerializedProperty listItemProperty, int fromIndex)
         {
             if (fromIndex > 0)
             {
-                MoveTo(listProperty, listItemProperty, fromIndex, fromIndex - 1);
+                MoveTo(listItemProperty, fromIndex, fromIndex - 1);
             }
         }
 
@@ -62,11 +68,11 @@ namespace Sibz.EditorList
         /// <param name="listProperty"></param>
         /// <param name="listItemProperty"></param>
         /// <param name="fromIndex"></param>
-        private void MoveDown(SerializedProperty listProperty, SerializedProperty listItemProperty, int fromIndex)
+        protected void MoveDown(SerializedProperty listItemProperty, int fromIndex)
         {
-            if (fromIndex < listProperty.arraySize)
+            if (fromIndex < ListProperty.arraySize)
             {
-                MoveTo(listProperty, listItemProperty, fromIndex, fromIndex + 1);
+                MoveTo(listItemProperty, fromIndex, fromIndex + 1);
             }
         }
     }

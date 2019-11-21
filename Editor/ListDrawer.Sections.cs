@@ -10,17 +10,21 @@ namespace Sibz.EditorList
     /// <typeparam name="T">Type of item in the list</typeparam>
     public abstract partial class ListDrawer<T> : PropertyDrawer
     {
+
+        protected virtual void PreGUI() { }
+        protected virtual void PostGUI() { }
+
         protected virtual void ContentSection(GUIContent label)
         {
 
             var listProperty = Property.FindPropertyRelative(nameof(EditorList<T>.List));
             if (listProperty != null)
             {
-                HeaderSection(listProperty, label);
+                HeaderSection(label);
 
-                ListAreaSection(listProperty);
+                ListAreaSection();
 
-                FooterSection(listProperty);
+                FooterSection();
             }
             else
             {
@@ -32,25 +36,28 @@ namespace Sibz.EditorList
         ///
         /// </summary>
         /// <param name="listProperty"></param>
-        protected virtual void ListAreaSection(SerializedProperty listProperty)
+        protected virtual void ListAreaSection()
         {
-            for (int i = 0; i < listProperty.arraySize; i++)
+            for (int i = 0; i < ListProperty.arraySize; i++)
             {
-                var listItemProperty = listProperty.GetArrayElementAtIndex(i);
-                ListItemAreaSection(listProperty, listItemProperty, i);
+                ListItemAreaSection(ListProperty.GetArrayElementAtIndex(i), i);
             }
         }
-        [Obsolete("Use ListAreaSection instead")]
+        [Obsolete("Use ListAreaSection() instead")]
         protected virtual void ListAreaDrawer(SerializedProperty listProperty) => ListAreaSection(listProperty);
+        [Obsolete("Use ListAreaSection() instead")]
+        protected virtual void ListAreaSection(SerializedProperty listProperty) => ListAreaSection();
 
         /// <summary>
         /// Header section. Can be overriden to change what content appears above the list.
         /// </summary>
         /// <param name="listProperty">The list SerializedProperty that has the associated array attached.</param>
         /// <param name="label">Label provided to the main PropertyField</param>
-        protected virtual void HeaderSection(SerializedProperty listProperty, GUIContent label) { }
-        [Obsolete("Use HeaderSection instead")]
-        protected virtual void Header(SerializedProperty listProperty, GUIContent label) => HeaderSection(listProperty, label);
+        protected virtual void HeaderSection(GUIContent label) { }
+        [Obsolete("Use HeaderSection() instead")]
+        protected virtual void HeaderSection(SerializedProperty listProperty, GUIContent label) => HeaderSection(label);
+        [Obsolete("Use HeaderSection() instead")]
+        protected virtual void Header(SerializedProperty listProperty, GUIContent label) => HeaderSection(label);
 
         /// <summary>
         ///
@@ -58,19 +65,21 @@ namespace Sibz.EditorList
         /// <param name="listProperty"></param>
         /// <param name="listItemProperty"></param>
         /// <param name="index"></param>
-        protected virtual void ListItemAreaSection(SerializedProperty listProperty, SerializedProperty listItemProperty, int index)
+        protected virtual void ListItemAreaSection(SerializedProperty listItemProperty, int index)
         {
             EditorGUILayout.BeginHorizontal();
             {
-                ListItemSection(listProperty, listItemProperty, index);
+                ListItemSection(listItemProperty, index);
 
-                ListItemButtonsSection(listProperty, listItemProperty, index);
+                ListItemButtonsSection(listItemProperty, index);
 
             }
             EditorGUILayout.EndHorizontal();
         }
-        [Obsolete("Use ListItemAreaSection instead")]
-        protected virtual void ListItemAreaDrawer(SerializedProperty listProperty, SerializedProperty listItemProperty, int index) => ListItemAreaSection(listProperty, listItemProperty, index);
+        [Obsolete("Use ListItemAreaSection() instead")]
+        protected virtual void ListItemAreaDrawer(SerializedProperty listProperty, SerializedProperty listItemProperty, int index) => ListItemAreaSection(listItemProperty, index);
+        [Obsolete("Use ListItemAreaSection() instead")]
+        protected virtual void ListItemAreaSection(SerializedProperty listProperty, SerializedProperty listItemProperty, int index) => ListItemAreaSection(listItemProperty, index);
 
         /// <summary>
         /// Item section. Defaults to a Property Field. Override if required. Is drawn inside Horizontal Section with buttons.
@@ -78,13 +87,15 @@ namespace Sibz.EditorList
         /// <param name="listProperty">The list SerializedProperty that has the associated array attached.</param>
         /// <param name="listItemProperty">The listItem SerializedProperty</param>
         /// <param name="index">Index of item</param>
-        protected virtual void ListItemSection(SerializedProperty listProperty, SerializedProperty listItemProperty, int index)
+        protected virtual void ListItemSection(SerializedProperty listItemProperty, int index)
         {
             EditorGUILayout.PropertyField(listItemProperty, GUIContent.none);
         }
+        [Obsolete("Use ListItemSection() instead")]
+        protected virtual void ListItemDrawer(SerializedProperty listProperty, SerializedProperty listItemProperty, int index) => ListItemSection(listItemProperty, index);
+        [Obsolete("Use ListItemSection() instead")]
+        protected virtual void ListItemSection(SerializedProperty listProperty, SerializedProperty listItemProperty, int index) => ListItemSection(listItemProperty, index);
 
-        [Obsolete("Use ListItemSection instead")]
-        protected virtual void ListItemDrawer(SerializedProperty listProperty, SerializedProperty listItemProperty, int index) => ListItemSection(listProperty, listItemProperty, index);
         /// <summary>
         /// Item Buttons Section. Defaults to Delete button and if Ordered=true, MoveUp and MoveDown  buttons.
         /// Is drawn inside Horizontal Section with list item.
@@ -92,27 +103,29 @@ namespace Sibz.EditorList
         /// <param name="listProperty">The list SerializedProperty that has the associated array attached.</param>
         /// <param name="listItemProperty">The listItem SerializedProperty</param>
         /// <param name="index">Index of item</param>
-        protected virtual void ListItemButtonsSection(SerializedProperty listProperty, SerializedProperty listItemProperty, int index)
+        protected virtual void ListItemButtonsSection(SerializedProperty listItemProperty, int index)
         {
             if (DeleteButton)
             {
-                DeleteItem(listProperty, listItemProperty, index);
+                DeleteItem(listItemProperty, index);
             }
             if (Ordered)
             {
                 if (MoveUpButton)
                 {
-                    MoveUp(listProperty, listItemProperty, index);
+                    MoveUp(listItemProperty, index);
                 }
 
                 if (MoveDownButton)
                 {
-                    MoveDown(listProperty, listItemProperty, index);
+                    MoveDown(listItemProperty, index);
                 }
             }
         }
-        [Obsolete("Use ListItemButtonsSection instead")]
-        protected virtual void ListItemButtonsDrawer(SerializedProperty listProperty, SerializedProperty listItemProperty, int index) => ListItemButtonsSection(listProperty, listItemProperty, index);
+        [Obsolete("Use ListItemButtonsSection() instead")]
+        protected virtual void ListItemButtonsDrawer(SerializedProperty listProperty, SerializedProperty listItemProperty, int index) => ListItemButtonsSection(listItemProperty, index);
+        [Obsolete("Use ListItemButtonsSection() instead")]
+        protected virtual void ListItemButtonsSection(SerializedProperty listProperty, SerializedProperty listItemProperty, int index) => ListItemButtonsSection(listItemProperty, index);
 
         /// <summary>
         /// Footer section. Defaults to a Delete All Button.
@@ -120,7 +133,7 @@ namespace Sibz.EditorList
         /// </summary>
         /// <param name="property">The main SerializedProperty the list belongs to</param>
         /// <param name="listProperty">The list SerializedProperty that has the associated array attached.</param>
-        protected virtual void FooterSection(SerializedProperty listProperty)
+        protected virtual void FooterSection()
         {
             EditorGUILayout.BeginHorizontal();
             {
@@ -128,12 +141,14 @@ namespace Sibz.EditorList
                 GUILayout.Label("", GUILayout.MaxWidth(indent * 10));
                 if (DeleteAllButton)
                 {
-                    ClearList(listProperty);
+                    ClearList();
                 }
             }
             EditorGUILayout.EndHorizontal();
         }
-        [Obsolete("Use FooterSection instead")]
-        protected virtual void Footer(SerializedProperty listProperty) => FooterSection(listProperty);
+        [Obsolete("Use FooterSection() instead")]
+        protected virtual void Footer(SerializedProperty listProperty) => FooterSection();
+        [Obsolete("Use FooterSection() instead")]
+        protected virtual void FooterSection(SerializedProperty listProperty) => FooterSection();
     }
 }

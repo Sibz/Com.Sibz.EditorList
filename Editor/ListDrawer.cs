@@ -19,11 +19,22 @@ namespace Sibz.EditorList
         {
             Property = property;
 
-            EditorGUI.BeginProperty(position, label, property);
+            ListProperty = Property.FindPropertyRelative(nameof(EditorList<T>.List));
+            if (ListProperty == null)
+            {
+                Debug.LogWarning($"{nameof(ListDrawer<T>)}: Unable to get list property. Be sure your property extends EditorList<T> and that the property class & T are Serializable");
+                return;
+            }
+
+
             if (AddColonToLabel)
             {
                 label.text = label.text + ":";
             }
+
+            EditorGUI.BeginProperty(position, label, property);
+
+            PreGUI();
 
             if (UseFoldout && (IsFoldedOut = Foldout(IsFoldedOut, label)) || !UseFoldout)
             {
@@ -48,6 +59,9 @@ namespace Sibz.EditorList
                 }
                 EditorGUI.indentLevel -= IndentLevelChange;
             }
+
+            PostGUI();
+
             EditorGUI.EndProperty();
         }
 

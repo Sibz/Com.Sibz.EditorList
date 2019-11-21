@@ -17,6 +17,8 @@ namespace Sibz.EditorList
 
         protected SerializedProperty Property { get; private set; }
 
+        protected SerializedProperty ListProperty { get; private set; }
+
         /// <summary>
         /// Indicates if list is ordered
         /// If ordered full set of delete, moveup and movedown buttons
